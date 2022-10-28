@@ -1,12 +1,17 @@
 ﻿using Microsoft.VisualBasic.FileIO;
-using TestWork2;
 
-namespace TestWork
+
+namespace TestWork2
 {
     public class Pars
     {
+        static void Log(string message)
+        {
+            File.AppendAllText("log.txt", message + "\n");
+        }
         static void Main(string[] args)
         {
+            Log("Запуск программы" + DateTime.Now);
             var Players = new List<Person>();
             using (TextFieldParser tfp = new TextFieldParser(@"C:\Users\tupae\OneDrive\Рабочий стол\Top100ChessPlayers.csv"))
             {
@@ -29,15 +34,17 @@ namespace TestWork
                     Players.Add(p);
                 }
             }
+            int kol = 0;
             foreach (Person p in Players)
             {
-                int kol = 0;
-                if (p.B_Year < 1980 && kol < 20)
+                if (p.B_Year < 1980 && kol < 10)
                 {
+                    Log(p.ToString());
                     Console.WriteLine(p);
                     kol++;
                 }
             }
+            Log("Завершение программы" +  DateTime.Now);
         }
     }
 }
