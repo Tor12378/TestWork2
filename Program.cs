@@ -1,50 +1,55 @@
-﻿using Microsoft.VisualBasic.FileIO;
-
-
-namespace TestWork2
+﻿using Docker.DotNet.Models;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V104.Cast;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+namespace TestWorkT
 {
-    public class Pars
+    internal class Program
     {
         static void Log(string message)
         {
-            File.AppendAllText("log.txt", message + "\n");
+            File.AppendAllText("logPars.txt", message + "\n");
         }
-        static void Main(string[] args)
+        static  void Pars()
         {
             Log("Запуск программы" + DateTime.Now);
-            var Players = new List<Person>();
-            using (TextFieldParser tfp = new TextFieldParser(@"C:\Users\tupae\OneDrive\Рабочий стол\Top100ChessPlayers.csv"))
+            IWebDriver driver = new ChromeDriver();
+            driver.Url = @"https://www.google.com/";
+            for (int i = 0; i < 10; i++)
             {
-                tfp.TextFieldType = FieldType.Delimited;
-                tfp.SetDelimiters(";");
-                string[] str1 = tfp.ReadFields();
-                while (!tfp.EndOfData)
+                try
                 {
-                    string[] str = tfp.ReadFields();
-                    Person p = new Person()
-                    {
-                        Rank = int.Parse(str[0]),
-                        Name = str[1],
-                        Title = str[2],
-                        Country = str[3],
-                        Rating = int.Parse(str[4]),
-                        Games = int.Parse(str[5]),
-                        B_Year = int.Parse(str[6]),
-                    };
-                    Players.Add(p);
+                    driver.FindElement(By.Name("q"));
+                    break;
+                }
+                catch(Exception)
+                {
+                    Thread.Sleep(2000);
                 }
             }
-            int kol = 0;
-            foreach (Person p in Players)
-            {
-                if (p.B_Year < 1980 && kol < 10)
-                {
-                    Log(p.ToString());
-                    Console.WriteLine(p);
-                    kol++;
-                }
-            }
-            Log("Завершение программы" +  DateTime.Now);
+            driver.FindElement(By.Name("q")).SendKeys("Hello World");
+            Thread.Sleep(2000);
+            IWebElement ele1 = driver.FindElement(By.Name("btnK"));
+            ele1.Click();
+            string title = driver.Title;
+            Console.WriteLine(title);
+            Log(title);
+            Thread.Sleep(1000);
+            driver.Close();
+            Log("Завершение программы" + DateTime.Now);
+        }
+
+
+        static  void Main(string[] args)
+        {
+            Pars();
         }
     }
 }
